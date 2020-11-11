@@ -1,0 +1,4 @@
+com\tientt\springmvc\controller\MainController.class
+com\tientt\springmvc\repository\RegistrationRepository.class
+com\tientt\springmvc\service\RegistrationService.class
+com\tientt\springmvc\entity\Registration.class
