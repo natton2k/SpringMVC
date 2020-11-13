@@ -8,10 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="./resources/css/main.css">
     <title>Search</title>
 </head>
 <body>
     <h2>Welcome, ${sessionScope.USER.lastname}</h2>
     <a href="logout">Logout</a>
+
+    <input type="text" name="searchValue"/>
+    <input type="button" value="Search" onclick="search(this)">
+    <div id="result"></div>
+    <script src="./resources/js/main.js"></script>
 </body>
 </html>

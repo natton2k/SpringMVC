@@ -12,6 +12,6 @@
 </head>
 <body>
     <h1 style="color: red"> Invalid username or password </h1>
-    <a href="/login">Click here to return to login</a>
+    <a href="login">Click here to return to login</a>
 </body>
 </html>
