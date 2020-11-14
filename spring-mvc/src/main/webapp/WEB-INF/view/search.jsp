@@ -13,9 +13,9 @@
 </head>
 <body>
     <h2>Welcome, ${sessionScope.USER.lastname}</h2>
-    <a href="logout">Logout</a>
+    <a href="logout">Logout</a> <br>
 
-    <input type="text" name="searchValue"/>
+    Search Value <input type="text" name="searchValue"/>
     <input type="button" value="Search" onclick="search(this)">
     <div id="result"></div>
     <script src="./resources/js/main.js"></script>

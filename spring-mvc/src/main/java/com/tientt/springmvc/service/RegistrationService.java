@@ -39,10 +39,26 @@ public class RegistrationService {
 
     public boolean update(RegistrationDTO registrationDTO) {
         Registration registration = this.registrationDTOMapper.toEntity(registrationDTO);
-        if (registrationRepository.findById(registration.getUsername()).orElseThrow(EntityNotFoundException::new)
-                != null) {
+        if (registrationRepository.findById(registration.getUsername()).
+                orElseThrow(EntityNotFoundException::new) != null) {
             registrationRepository.saveAndFlush(registration);
         }
         return true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
