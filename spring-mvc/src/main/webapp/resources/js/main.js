@@ -1,19 +1,18 @@
-function search(button) {
+async function search(button) {
     let txtSearch = document.getElementsByName('searchValue')[0];
     let resultDiv = document.getElementById('result');
     let searchValue = txtSearch.value;
     if (searchValue !== '') {
-        let url = './user/search-user?searchValue=' + searchValue;
-        fetch(url, {
-            method: 'GET'
-        }).then(response => {
-            const status = response.status;
-            if (status === 200){
-                response.json().then(data => {
-                    renderRegistrationRows(data, resultDiv);
-                });
+        try{
+            let url = './user/search-user?searchValue=' + searchValue;
+            const response = await fetch(url);
+            if (response.status === 200){
+                const messageBody = await response.json();
+                renderRegistrationRows(messageBody, resultDiv);
             }
-        })
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 function renderHeaderRegistrationRows(table){
@@ -122,32 +121,32 @@ function displayErrorAtRow(row, error){
     }
 
 }
-function updateUserAtRow(row){
+async function updateUserAtRow(row){
     let param = getUpdateInformationAtRow(row);
     const url = './user/';
-    fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Content-Type':'application/json'
-        },
-        body: JSON.stringify(param)
-    }).then(response => {
+    try{
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(param)
+        });
         removeValidErrorAtRow(row);
-        let response_body = response.json();
         if (response.status === 200){
-            response_body.then(data =>{
-                alert(data.message);
-            })
+            alert('Update successfully');
         } else if (response.status === 400){
-            response_body.then(error =>{
-                displayErrorAtRow(row, error);
-            })
+            const message = await response.json();
+            displayErrorAtRow(row, message);
         } else if (response.status === 204){
-            alert('User is not existed!!!');
+            alert('User does not existed');
         } else {
-            console.log('Error');
+            const responseData = await response.text();
+            console.log(responseData);
         }
-    })
+    } catch (err){
+        console.log('Error');
+    }
 }
 
 function removeValidErrorAtRow(row){
