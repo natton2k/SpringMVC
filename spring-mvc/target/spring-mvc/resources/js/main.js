@@ -3,6 +3,14 @@ function search(button) {
     var result = document.getElementById('result');
     var searchValue = txtSearch.value;
     if (searchValue !== '') {
+        let url = './user/search-user?searchValue=' + searchValue;
+        fetch(url, {
+            method: 'GET'
+        }).then( response =>{
+            const messageBody = response.json();
+            console.log(messageBody);
+            }
+        )
         var req = new XMLHttpRequest();
         req.open('GET', './user/search-user?searchValue=' + searchValue, true);
         req.onreadystatechange = function () {
