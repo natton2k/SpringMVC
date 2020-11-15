@@ -1,7 +1,7 @@
 function search(button) {
-     let txtSearch = document.getElementsByName('searchValue')[0];
-     let result = document.getElementById('result');
-     let searchValue = txtSearch.value;
+    let txtSearch = document.getElementsByName('searchValue')[0];
+    let resultDiv = document.getElementById('result');
+    let searchValue = txtSearch.value;
     if (searchValue !== '') {
         let url = './user/search-user?searchValue=' + searchValue;
         fetch(url, {
@@ -10,20 +10,10 @@ function search(button) {
             const status = response.status;
             if (status === 200){
                 response.json().then(data => {
-                    renderRegistrationRows(data, result);
+                    renderRegistrationRows(data, resultDiv);
                 });
-
             }
         })
-        /*let req = new XMLHttpRequest();
-        req.open('GET', './user/search-user?searchValue=' + searchValue, true);
-        req.onreadystatechange = function () {
-            if (req.readyState === 4 && req.status === 200) {
-                 let users = JSON.parse(req.responseText);
-                renderRegistrationRows(users, result);
-            }
-        }
-        req.send();*/
     }
 }
 function renderHeaderRegistrationRows(table){
@@ -49,8 +39,8 @@ function renderHeaderRegistrationRows(table){
     table.appendChild(tr);
 }
 
-function renderRegistrationRows(registrations, result){
-    result.innerHTML = '';
+function renderRegistrationRows(registrations, resultDiv){
+    resultDiv.innerHTML = '';
     let table = document.createElement('table');
     table.setAttribute('border',1);
     if (registrations != null && registrations.length !== 0){
@@ -77,7 +67,8 @@ function renderRegistrationRows(registrations, result){
             btnUpdate.innerHTML = 'Update';
             tdUpdate.appendChild(btnUpdate);
             btnUpdate.onclick = function (e){
-                updateUser(e.target)
+                let row = e.target.parentNode.parentNode;
+                updateUserAtRow(row);
             }
             tr.appendChild(tdNo);
             tr.appendChild(tdUsername);
@@ -87,31 +78,52 @@ function renderRegistrationRows(registrations, result){
             tr.appendChild(tdUpdate);
             table.appendChild(tr);
         }
-        result.appendChild(table);
+        resultDiv.appendChild(table);
     } else {
         let noRecordsText = document.createElement('h2');
         noRecordsText.innerHTML = 'No records matched!!!';
-        result.appendChild(noRecordsText);
+        resultDiv.appendChild(noRecordsText);
     }
 
 }
 
-function updateUser(e){
-    let tr = e.parentNode.parentNode;
-    let username = tr.getElementsByClassName('lbl-username')[0];
-    let password = tr.getElementsByClassName('txt-password')[0];
-    let lastname = tr.getElementsByClassName('txt-lastname')[0];
-    let role = tr.getElementsByClassName('chk-role')[0];
+function getUpdateInformationAtRow(row){
+    let username = row.getElementsByClassName('lbl-username')[0];
+    let password = row.getElementsByClassName('txt-password')[0];
+    let lastname = row.getElementsByClassName('txt-lastname')[0];
+    let role = row.getElementsByClassName('chk-role')[0];
     let usernameVal = username.innerHTML;
     let passwordVal = password.value;
     let lastNameVal = lastname.value;
     let roleVal = role.checked;
-    let param = {
+    return {
         username: usernameVal,
         password: passwordVal,
         lastname: lastNameVal,
         admin: roleVal
     };
+}
+
+function displayErrorAtRow(row, error){
+    let password = row.getElementsByClassName('txt-password')[0];
+    let lastname = row.getElementsByClassName('txt-lastname')[0];
+    if (error.errors.password !== undefined) {
+        let err = document.createElement('div');
+        err.innerHTML = error.errors.password;
+        err.className = 'password-error';
+        password.parentNode.appendChild(err);
+    }
+
+    if (error.errors.lastname !== undefined) {
+        let err = document.createElement('div');
+        err.innerHTML = error.errors.lastname;
+        err.className = 'lastname-error';
+        lastname.parentNode.appendChild(err);
+    }
+
+}
+function updateUserAtRow(row){
+    let param = getUpdateInformationAtRow(row);
     const url = './user/';
     fetch(url, {
         method: 'PUT',
@@ -120,7 +132,7 @@ function updateUser(e){
         },
         body: JSON.stringify(param)
     }).then(response => {
-        removeValidError(tr);
+        removeValidErrorAtRow(row);
         let response_body = response.json();
         if (response.status === 200){
             response_body.then(data =>{
@@ -128,67 +140,19 @@ function updateUser(e){
             })
         } else if (response.status === 400){
             response_body.then(error =>{
-                if (error.errors.password !== undefined) {
-                    let err = document.createElement('div');
-                    err.innerHTML = error.errors.password;
-                    err.className = 'password-error';
-                    password.parentNode.appendChild(err);
-                }
-
-                if (error.errors.lastname !== undefined) {
-                    let err = document.createElement('div');
-                    err.innerHTML = error.errors.lastname;
-                    err.className = 'lastname-error';
-                    lastname.parentNode.appendChild(err);
-                }
+                displayErrorAtRow(row, error);
             })
         } else if (response.status === 204){
             alert('User is not existed!!!');
         } else {
-            console.log('Error: ');
+            console.log('Error');
         }
     })
-
-    /*let req = new XMLHttpRequest();
-    req.open('PUT','./user/', true);
-    req.setRequestHeader('Content-Type', 'application/json');
-    req.onreadystatechange = function (){
-        if (req.readyState === XMLHttpRequest.DONE) {
-            if (req.status === 200) {
-                let res = JSON.parse(req.responseText);
-                alert(res.message);
-                removeValidError(tr);
-                search()
-            } else if (req.status === 400) {
-                removeValidError(tr);
-
-                let error = JSON.parse(req.responseText);
-                if (error.errors.password !== undefined) {
-                    let err = document.createElement('div');
-                    err.innerHTML = error.errors.password;
-                    err.className = 'password-error';
-                    password.parentNode.appendChild(err);
-                }
-
-                if (error.errors.lastname !== undefined) {
-                    let err = document.createElement('div');
-                    err.innerHTML = error.errors.lastname;
-                    err.className = 'lastname-error';
-                    lastname.parentNode.appendChild(err);
-                }
-            } else if (req.status === 204) {
-                alert('User is not existed!!!');
-            } else {
-                console.log('Error: ' + req.responseText);
-            }
-        }
-    }
-    req.send(JSON.stringify(param));*/
 }
 
-function removeValidError(tr){
-    let passwordError = tr.getElementsByClassName('password-error');
-    let lastnameError = tr.getElementsByClassName('lastname-error');
+function removeValidErrorAtRow(row){
+    let passwordError = row.getElementsByClassName('password-error');
+    let lastnameError = row.getElementsByClassName('lastname-error');
     for (let i = 0; i < passwordError.length; i++){
         passwordError[i].parentNode.removeChild(passwordError[i]);
     }
