@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,8 +30,13 @@ public class ExceptionHandlerController {
         Map<String, String> errors = new HashMap<>();
 
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        for (FieldError fieldError : fieldErrors) {
+        for (FieldError fieldError: fieldErrors){
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
+        List<ObjectError> objectErrors = ex.getBindingResult().getGlobalErrors();
+        for (ObjectError objectError : objectErrors) {
+            errors.put(objectError.getCode(), objectError.getDefaultMessage());
         }
 
         body.put("errors", errors);
@@ -38,7 +44,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    public ResponseEntity<CommonResponse> handleEntityNotFound(){
+    public ResponseEntity<CommonResponse> handleEntityNotFound() {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

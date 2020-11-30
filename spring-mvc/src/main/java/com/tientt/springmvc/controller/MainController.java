@@ -38,7 +38,7 @@ public class MainController {
         String url = "invalid";
         if (user != null) {
             HttpSession session = request.getSession();
-            response.setHeader("Cache-Control","no-cache, no-store");
+            response.setHeader("Cache-Control", "no-cache, no-store");
             session.setAttribute("USER", user);
             url = "search";
         }
@@ -47,15 +47,14 @@ public class MainController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView renderSearchPage(){
+    public ModelAndView renderSearchPage() {
         return new ModelAndView(SEARCH_PAGE);
     }
 
     @RequestMapping(value = "/invalid", method = RequestMethod.GET)
-    public ModelAndView renderInvalidPage(){
+    public ModelAndView renderInvalidPage() {
         return new ModelAndView(INVALID_PAGE);
     }
-
 
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -66,5 +65,11 @@ public class MainController {
         }
         return new RedirectView("login");
     }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public ModelAndView getRegisterPage() {
+        return new ModelAndView("register");
+    }
+
 
 }

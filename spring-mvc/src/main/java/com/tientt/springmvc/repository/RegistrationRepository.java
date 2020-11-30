@@ -7,6 +7,11 @@ import java.util.List;
 
 public interface RegistrationRepository extends JpaRepository<Registration, String> {
     long countByUsernameAndPassword(String username, String password);
+
     Registration findByUsername(String username);
+
     List<Registration> getByLastnameContainingIgnoreCase(String lastname);
+
+    Integer deleteByUsername(String username);
+
 }

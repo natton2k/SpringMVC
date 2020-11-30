@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class RegistrationService {
     private RegistrationRepository registrationRepository;
     private RegistrationDTOMapper registrationDTOMapper;
@@ -44,6 +46,21 @@ public class RegistrationService {
             registrationRepository.saveAndFlush(registration);
         }
         return true;
+    }
+
+    public boolean delete(String username) {
+        int result = registrationRepository.deleteByUsername(username);
+        return result == 1;
+    }
+
+    public boolean isUsernameExisted(String username) {
+        Registration registration = this.registrationRepository.findByUsername(username);
+        return registration != null;
+    }
+
+    public void createUser(RegistrationDTO dto){
+        Registration registration = this.registrationDTOMapper.toEntity(dto);
+        this.registrationRepository.saveAndFlush(registration);
     }
 }
 

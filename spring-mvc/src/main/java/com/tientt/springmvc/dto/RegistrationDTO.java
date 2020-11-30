@@ -49,4 +49,14 @@ public class RegistrationDTO implements Serializable {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
+    @Override
+    public String toString() {
+        return "RegistrationDTO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", admin=" + admin +
+                '}';
+    }
 }

@@ -33,14 +33,16 @@
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
-                <prop key="hibernate.physical_naming_strategy">org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl</prop>
+                <prop key="hibernate.physical_naming_strategy">
+                    org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+                </prop>
             </props>
         </property>
         <property name="persistenceProvider">
             <bean class="org.hibernate.jpa.HibernatePersistenceProvider"></bean>
         </property>
     </bean>
-    <bean id="transactionManager" 
+    <bean id="transactionManager"
           class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>

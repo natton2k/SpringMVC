@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-        <action>
-            <actionName>CUSTOM-tomcat</actionName>
-            <displayName>tomcat</displayName>
-            <goals>
-                <goal>clean</goal>
-                <goal>install</goal>
-                <goal>tomcat7:run</goal>
-            </goals>
-        </action>
-    </actions>
+    <action>
+        <actionName>CUSTOM-tomcat</actionName>
+        <displayName>tomcat</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>install</goal>
+            <goal>tomcat7:run</goal>
+        </goals>
+    </action>
+</actions>
