@@ -1,0 +1,4 @@
+127.0.0.1 - - [11/Dec/2020:11:20:46 +0700] "GET /spring-mvc/ HTTP/1.1" 200 410 http-bio-8080-exec-1 685
+127.0.0.1 - - [11/Dec/2020:11:20:49 +0700] "POST /spring-mvc/login HTTP/1.1" 302 - http-bio-8080-exec-2 301
+127.0.0.1 - - [11/Dec/2020:11:20:49 +0700] "GET /spring-mvc/search HTTP/1.1" 200 392 http-bio-8080-exec-2 202
+127.0.0.1 - - [11/Dec/2020:11:20:58 +0700] "GET /spring-mvc/user/search-user?searchValue=[a-z0-9] HTTP/1.1" 200 243 http-bio-8080-exec-4 116

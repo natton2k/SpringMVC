@@ -177,22 +177,20 @@ function removeValidErrorAtRow(row) {
     }
 }
 
-function deleteUser(e) {
-    let username = e.getAttribute('username');
-    let req = new XMLHttpRequest();
-    req.open('DELETE', './user/?username=' + username, true);
-    req.onreadystatechange = function () {
-        if (req.readyState === XMLHttpRequest.DONE) {
-            if (req.status === 200) {
-                let response = JSON.parse(req.responseText);
-                alert(response.message);
-                search();
-            } else {
-                console.log('Error' + req.responseText);
-            }
-        }
-    };
-    req.send();
+async function deleteUser(e) {
+    const username = e.getAttribute('username');
+    const url = './user/?username=' + username;
+    const response = await fetch(url, {
+        method: 'DELETE'
+    });
+    if (response.status === 200){
+        const body = await response.json();
+        alert(body.message);
+        search();
+    } else {
+        const responseData = await response.text();
+        console.log('Error' + responseData);
+    }
 }
 
 

@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 @ConfirmPasswordNotMatch
 public class RegisterForm {
     @UsernameExisted
-    @Size(min = 6, max = 20)
     private String username;
     @Size(min = 8, max = 20)
     private String password;

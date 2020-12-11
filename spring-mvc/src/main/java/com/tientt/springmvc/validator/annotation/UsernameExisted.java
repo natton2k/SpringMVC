@@ -1,6 +1,5 @@
 package com.tientt.springmvc.validator.annotation;
 
-import com.tientt.springmvc.validator.ConfirmPasswordValidator;
 import com.tientt.springmvc.validator.UsernameExistedValidator;
 
 import javax.validation.Constraint;

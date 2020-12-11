@@ -77,11 +77,11 @@ public class RegistrationRestController {
         return ResponseEntity.ok(response);
     }
 
-    /*@InitBinder("registerForm")
-    //@InitBinder
-    private void initBinder(WebDataBinder binder){
-        binder.addValidators(validator);
-    }*/
+//    @InitBinder("registerForm")
+//    //@InitBinder
+//    private void initBinder(WebDataBinder binder){
+//        binder.addValidators(validator);
+//    }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<CommonResponse> register(
