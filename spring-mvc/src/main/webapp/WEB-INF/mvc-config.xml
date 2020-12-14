@@ -14,5 +14,11 @@
         <property name="suffix" value=".jsp"/>
     </bean>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
-
+    
+    <bean id="messageSource"
+            class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename">
+            <value>classpath:/messages</value>
+        </property>
+    </bean>
 </beans>

@@ -1,9 +1,17 @@
 package com.tientt.springmvc.controller;
 
+import com.tientt.springmvc.dto.RegistrationDTO;
 import com.tientt.springmvc.entity.Registration;
+import com.tientt.springmvc.form.RegisterForm;
+import com.tientt.springmvc.mapper.RegisterFormMapper;
 import com.tientt.springmvc.service.RegistrationService;
+import com.tientt.springmvc.validator.RegisterValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +20,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -19,6 +30,10 @@ public class MainController {
     public static String SEARCH_PAGE = "search";
     @Autowired
     RegistrationService registrationService;
+    @Autowired
+    RegisterFormMapper formMapper;
+    @Autowired
+    RegisterValidator validator;
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView getLoginPage() {
@@ -66,5 +81,32 @@ public class MainController {
         return new ModelAndView("register");
     }
 
+
+    @RequestMapping(value = "/register_taglib", method = RequestMethod.GET)
+    public ModelAndView getRegisterTaglibPage(){
+        RegisterForm registerForm = new RegisterForm();
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", registerForm);
+        return  new ModelAndView("register_taglib", map);
+    }
+
+    @RequestMapping(value = "/registerTaglib", method = RequestMethod.POST)
+    public ModelAndView registerProcess(
+            @ModelAttribute("user") @Valid RegisterForm registerForm,
+            BindingResult bindingResult
+            
+    ){
+        if (bindingResult.hasErrors()){
+            return new ModelAndView("register_taglib");
+        }
+        RegistrationDTO dto = formMapper.toDTO(registerForm);
+        registrationService.createUser(dto);
+        return new ModelAndView("login");
+    }
+
+    @InitBinder("user")
+    public void initBider(WebDataBinder binder){
+        binder.addValidators(validator);
+    }
 
 }

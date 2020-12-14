@@ -6,6 +6,6 @@
 <body>
 <h1 style="color: red"> Invalid username or password </h1>
 <a href="login">Click here to return to login</a>
-<a href="register">Click here to register new account</a>
+<a href="register_taglib">Click here to register new account</a>
 </body>
 </html>

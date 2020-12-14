@@ -4,14 +4,15 @@ import com.tientt.springmvc.validator.annotation.ConfirmPasswordNotMatch;
 import com.tientt.springmvc.validator.annotation.UsernameExisted;
 
 import javax.validation.constraints.Size;
-@ConfirmPasswordNotMatch
+//@ConfirmPasswordNotMatch
 public class RegisterForm {
-    @UsernameExisted
+    //@UsernameExisted
+    //@Size(min = 6, max = 20)
     private String username;
-    @Size(min = 8, max = 20)
+    //@Size(min = 8, max = 20)
     private String password;
     private String confirmPassword;
-    @Size(min = 2, max = 50)
+    //@Size(min = 2, max = 50)
     private String lastname;
 
     public RegisterForm() {

@@ -10,6 +10,6 @@
     <input type="submit" name="btnLogin" value="Login"/>
     <input type="reset" value="Reset"/>
 </form>
-<a href="register">Click here to create new account</a>
+<a href="register_taglib">Click here to create new account</a>
 </body>
 </html>
