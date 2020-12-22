@@ -2,11 +2,13 @@ package com.tientt.springmvc.controller;
 
 import com.tientt.springmvc.dto.RegistrationDTO;
 import com.tientt.springmvc.form.RegisterForm;
+import com.tientt.springmvc.mapper.NewResponseModelMapper;
 import com.tientt.springmvc.mapper.RegisterFormMapper;
 import com.tientt.springmvc.mapper.RegistrationResponseModelMapper;
 import com.tientt.springmvc.mapper.UpdateUserModelMapper;
 import com.tientt.springmvc.request.UpdateUserRequest;
 import com.tientt.springmvc.response.CommonResponse;
+import com.tientt.springmvc.responsemodel.NewRegistrationResponseModel;
 import com.tientt.springmvc.responsemodel.RegistrationResponseModel;
 import com.tientt.springmvc.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +30,32 @@ public class RegistrationRestController {
     private UpdateUserModelMapper updateUserModelMapper;
     private RegisterFormMapper formMapper;
     private Validator validator;
+    private NewResponseModelMapper newResponseModelMapper;
 
     @Autowired
     public RegistrationRestController(RegistrationResponseModelMapper responseModelMapper,
                                       RegistrationService registrationService,
                                       UpdateUserModelMapper updateUserModelMapper,
                                       RegisterFormMapper formMapper,
-                                      @Qualifier("registerValidator") Validator validator) {
+                                      @Qualifier("registerValidator") Validator validator,
+                                        NewResponseModelMapper newResponseModelMapper) {
         this.responseModelMapper = responseModelMapper;
         this.registrationService = registrationService;
         this.updateUserModelMapper = updateUserModelMapper;
         this.formMapper = formMapper;
         this.validator = validator;
+        this.newResponseModelMapper = newResponseModelMapper;
+
     }
 
 
     @GetMapping(value = "/search-user")
-    public ResponseEntity<List<RegistrationResponseModel>> search(
+    public ResponseEntity<List<NewRegistrationResponseModel>> search(
             @RequestParam("searchValue") String searchValue
     ) {
         List<RegistrationDTO> registrationDTOList = registrationService.searchByLastName(searchValue);
-        List<RegistrationResponseModel> registrationResponseModelList = responseModelMapper.toResponseModel(registrationDTOList);
+        List<NewRegistrationResponseModel> registrationResponseModelList
+                = newResponseModelMapper.toResponseModel(registrationDTOList);
         return ResponseEntity.ok(registrationResponseModelList);
     }
 
@@ -57,8 +64,6 @@ public class RegistrationRestController {
             @Valid @RequestBody UpdateUserRequest request
     ) {
         RegistrationDTO registrationDTO = updateUserModelMapper.toDTO(request);
-        System.out.println(request.isAdmin());
-        System.out.println(registrationDTO.isAdmin());
         boolean result = registrationService.update(registrationDTO);
         CommonResponse response = new CommonResponse(result, "Update successfully", null);
         return ResponseEntity.ok(response);
