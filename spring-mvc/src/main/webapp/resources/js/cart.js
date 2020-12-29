@@ -1,6 +1,6 @@
-function getProducts(){
+function getCart(){
     let request = new XMLHttpRequest();
-    request.open('GET', './api/v1/products', true);
+    request.open('GET', './api/v1/shoppingCart', true);
     request.onreadystatechange = function (){
         if (request.readyState === XMLHttpRequest.DONE){
             if (request.status === 200){
@@ -16,9 +16,10 @@ function getProducts(){
 
 function renderTable(productList){
     let mainFrame = document.getElementById("mainFrame");
+    mainFrame.innerHTML = "";
     if (productList === undefined || productList.length === 0){
         let h2 = document.createElement("h2");
-        h2.innerHTML = "Shop is out of order. Please come back again";
+        h2.innerHTML = "No item in your cart";
         mainFrame.appendChild(h2);
         return;
     }
@@ -30,7 +31,7 @@ function renderTable(productList){
 }
 
 function renderTableHeaders(tableElement){
-    const headers = ["ID", "Name", "Price", "Add to cart"];
+    const headers = ["ID", "Name", "Price", "Quantity", "Remove item(s)"];
     let tr = document.createElement("tr");
     tableElement.appendChild(tr);
     for (let i = 0; i < headers.length; i++){
@@ -59,24 +60,24 @@ function renderTableRows(tableElement, productList){
         renderRowData(tr, product.id);
         renderRowData(tr, product.name);
         renderRowData(tr, product.price);
-        let btnAddToCart = document.createElement("button");
-        btnAddToCart.innerHTML = "Add to cart";
-        btnAddToCart.onclick = function (e){
-            addToCart(product.id);
+        renderRowData(tr, product.quantity);
+        let btnRemove = document.createElement("button");
+        btnRemove.innerHTML = "Remove";
+        btnRemove.onclick = function (e){
+            removeProductInCart(product.id);
         }
-        addElementToRowData(tr, btnAddToCart);
+        addElementToRowData(tr, btnRemove);
         tableElement.appendChild(tr);
     }
-
 }
 
-function addToCart(id){
+function removeProductInCart(id){
     let request = new XMLHttpRequest();
-    request.open('POST', './api/v1/shoppingCart/products/'+id, true);
+    request.open('DELETE', './api/v1/shoppingCart/products/'+id, true);
     request.onreadystatechange = function (){
         if (request.readyState === XMLHttpRequest.DONE){
             if (request.status === 200){
-                alert("Add successfully");
+                getCart();
             } else {
                 console.log("Error " + request.status);
             }

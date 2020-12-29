@@ -110,4 +110,9 @@ public class MainController {
     public ModelAndView getShopPage(){
         return new ModelAndView("shop");
     }
+
+    @GetMapping("showCart")
+    public ModelAndView getCartPage(){
+        return new ModelAndView("cart");
+    }
 }

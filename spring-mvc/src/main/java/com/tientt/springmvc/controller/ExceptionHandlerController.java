@@ -1,6 +1,7 @@
 package com.tientt.springmvc.controller;
 
 import com.tientt.springmvc.response.CommonResponse;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -46,6 +47,11 @@ public class ExceptionHandlerController {
     @ExceptionHandler(value = {EntityNotFoundException.class})
     public ResponseEntity<CommonResponse> handleEntityNotFound() {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(value = {TypeMismatchException.class})
+    public ResponseEntity<CommonResponse> handleTypeMismatch(){
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
 

@@ -6,6 +6,7 @@
 </head>
 <body onload="getProducts()">
     <h1>Book shop</h1>
+    <a href="login">Return to login</a>
     <div id="mainFrame"></div>
     <a href="showCart">Click here to show your cart</a>
 </body>
