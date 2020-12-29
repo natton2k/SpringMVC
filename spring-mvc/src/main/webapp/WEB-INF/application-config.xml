@@ -82,6 +82,7 @@
     <!--<jpa:repositories base-package="com.tientt.springmvc.repository"
                       entity-manager-factory-ref="PostgreSQLEntityManagerFactory"/>-->
     <jpa:repositories base-package="com.tientt.springmvc.repository"
-                      entity-manager-factory-ref="MSSQLEntityManagerFactory"/>
+                      entity-manager-factory-ref="MSSQLEntityManagerFactory"
+                        transaction-manager-ref="MSSQLTransactionManager"/>
 
 </beans>
